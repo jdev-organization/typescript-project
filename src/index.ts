@@ -1,6 +1,8 @@
 import { processUserData } from "./userService";
 import { calculatePrice } from "./pricing";
-import { databaseQuery } from "./database";
+import { databaseQuery, getUserByEmail } from "./database";
+import { runCommand, readFile, generateToken } from "./security";
+import { deleteUserEndpoint, fetchUrl } from "./api";
 
 // Unused import - code smell
 import { unusedFunction } from "./utils";
@@ -8,6 +10,10 @@ import { unusedFunction } from "./utils";
 // Hardcoded secret - security issue
 const API_KEY = "sk-1234567890abcdef";
 const PASSWORD = "admin123";
+const AWS_ACCESS_KEY = "AKIAIOSFODNN7EXAMPLE";
+const AWS_SECRET_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+const GITHUB_TOKEN = "ghp_1234567890abcdefghijklmnopqrstuvwxyz";
+const JWT_SECRET = "my-secret-key-12345";
 
 // Magic numbers - code smell
 function calculateDiscount(price: number): number {
@@ -105,6 +111,22 @@ function processData(data: any): any {
   return data.something.else;
 }
 
+// eval() usage - CRITICAL security issue
+function executeUserCode(userCode: string): any {
+  return eval(userCode); // Dangerous: allows code injection
+}
+
+// Dangerous innerHTML usage - XSS vulnerability
+function setUserContent(elementId: string, userInput: string): void {
+  // In browser context, this would be:
+  // const element = document.getElementById(elementId);
+  // if (element) {
+  //   element.innerHTML = userInput; // XSS vulnerability
+  // }
+  // This is a security issue - no sanitization
+  console.log(`Setting content for ${elementId}: ${userInput}`);
+}
+
 // SQL Injection vulnerability - security issue
 function getUserById(userId: string) {
   const query = `SELECT * FROM users WHERE id = '${userId}'`;
@@ -123,9 +145,35 @@ async function main() {
 
   const user = await getUserById("1' OR '1'='1"); // SQL injection attempt
 
+  // Dangerous eval usage
+  const result = executeUserCode("console.log('hacked')");
+
+  // XSS vulnerability
+  setUserContent("content", "<img src=x onerror=alert('XSS')>");
+
+  // SQL injection
+  const userEmail = getUserByEmail("admin' OR '1'='1");
+
+  // Command injection
+  runCommand("; rm -rf /");
+
+  // Path traversal
+  const fileContent = readFile("../../../etc/passwd");
+
+  // Insecure token generation
+  const token = generateToken();
+
+  // SSRF vulnerability
+  await fetchUrl("http://localhost:8080/admin");
+
+  // Insecure API call
+  deleteUserEndpoint("123");
+
   console.log("Price:", price);
   console.log("Discount:", discount);
   console.log("Complex result:", complex);
+  console.log("AWS Key:", AWS_ACCESS_KEY); // Logging secrets
+  console.log("Token:", token);
 }
 
 main();

@@ -10,6 +10,22 @@ export function databaseQuery(query: string): any {
   return { result: `Executing: ${query}` };
 }
 
+// More explicit SQL injection patterns
+export function getUserByEmail(email: string): any {
+  const query = "SELECT * FROM users WHERE email = '" + email + "'";
+  return databaseQuery(query);
+}
+
+export function deleteUser(userId: string): any {
+  const query = `DELETE FROM users WHERE id = ${userId}`;
+  return databaseQuery(query);
+}
+
+export function updateUser(userId: string, field: string, value: string): any {
+  const query = `UPDATE users SET ${field} = '${value}' WHERE id = ${userId}`;
+  return databaseQuery(query);
+}
+
 // Missing input validation - code smell
 export function insertUser(userData: any): void {
   const query = `INSERT INTO users VALUES ('${userData.name}', '${userData.email}')`;
@@ -30,6 +46,19 @@ export function hashPassword(password: string): string {
     hash = hash & hash;
   }
   return hash.toString();
+}
+
+// Using crypto with weak algorithm - security issue
+import { createHash } from "crypto";
+
+export function weakHashPassword(password: string): string {
+  // MD5 is cryptographically broken
+  return createHash("md5").update(password).digest("hex");
+}
+
+export function weakHashPasswordSHA1(password: string): string {
+  // SHA1 is cryptographically broken
+  return createHash("sha1").update(password).digest("hex");
 }
 
 // Exposed sensitive data - security issue

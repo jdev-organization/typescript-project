@@ -1,0 +1,11 @@
+name: "CodeQL Config"
+
+paths:
+  - src/**/*.ts
+
+paths-ignore:
+  - node_modules
+  - dist
+
+queries:
+  - uses: security-and-quality
