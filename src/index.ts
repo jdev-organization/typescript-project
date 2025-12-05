@@ -43,41 +43,41 @@ function complexFunction(
   d: number,
   e: number
 ): number {
-  let result = 0;
+  
   if (a > 0) {
     if (b > 0) {
       if (c > 0) {
         if (d > 0) {
           if (e > 0) {
-            result = a + b + c + d + e;
+            return a + b + c + d + e;
           } else {
-            result = a + b + c + d;
+            return a + b + c + d;
           }
         } else {
           if (e > 0) {
-            result = a + b + c + e;
+            return a + b + c + e;
           } else {
-            result = a + b + c;
+            return a + b + c;
           }
         }
       } else {
         if (d > 0) {
           if (e > 0) {
-            result = a + b + d + e;
+            return a + b + d + e;
           } else {
-            result = a + b + d;
+            return a + b + d;
           }
         } else {
-          result = a + b;
+          return a + b;
         }
       }
     } else {
-      result = a;
+      return a;
     }
   } else {
-    result = 0;
+    return 0;
   }
-  return result;
+  
 }
 
 // Unused variable - code smell
