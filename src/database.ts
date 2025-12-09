@@ -49,17 +49,14 @@ export function hashPassword(password: string): string {
 }
 
 // Using crypto with weak algorithm - security issue
-import { createHash } from "crypto";
+import bcrypt from "bcrypt";
 
 export function weakHashPassword(password: string): string {
-  // MD5 is cryptographically broken
-  return createHash("md5").update(password).digest("hex");
+  // Using bcrypt is more secure
+  return bcrypt.hashSync(password, 10);
 }
 
-export function weakHashPasswordSHA1(password: string): string {
-  // SHA1 is cryptographically broken
-  return createHash("sha1").update(password).digest("hex");
-}
+
 
 // Exposed sensitive data - security issue
 export function getUserProfile(userId: string): any {
