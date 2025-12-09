@@ -53,7 +53,8 @@ import { createHash } from "crypto";
 
 export function weakHashPassword(password: string): string {
   // MD5 is cryptographically broken
-  return createHash("md5").update(password).digest("hex");
+  const bcrypt = require("bcrypt");
+return bcrypt.hashSync(password, 10);
 }
 
 export function weakHashPasswordSHA1(password: string): string {
