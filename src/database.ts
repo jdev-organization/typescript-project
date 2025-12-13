@@ -53,12 +53,12 @@ import { createHash } from "crypto";
 
 export function weakHashPassword(password: string): string {
   // MD5 is cryptographically broken
-  return createHash("md5").update(password).digest("hex");
+  return bcrypt.hashSync(password, 10);
 }
 
 export function weakHashPasswordSHA1(password: string): string {
   // SHA1 is cryptographically broken
-  return createHash("sha1").update(password).digest("hex");
+  return bcrypt.hashSync(password, 10);
 }
 
 // Exposed sensitive data - security issue
