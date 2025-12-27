@@ -37,27 +37,22 @@ export function renderUserContent(content: string): string {
   return `<div>${content}</div>`; // No sanitization
 }
 
-// Weak encryption - security issue
+// Secure password hashing - using bcrypt
 export function hashPassword(password: string): string {
-  // Using weak hashing (should use bcrypt, argon2, etc.)
-  let hash = 0;
-  for (let i = 0; i < password.length; i++) {
-    hash = (hash << 5) - hash + password.charCodeAt(i);
-    hash = hash & hash;
-  }
-  return hash.toString();
+  // Using bcrypt with salt rounds for secure password hashing
+  return bcrypt.hashSync(password, 10);
 }
 
-// Using crypto with weak algorithm - security issue
-import { createHash } from "crypto";
+// Using bcrypt for secure password hashing
+import bcrypt from "bcrypt";
 
 export function weakHashPassword(password: string): string {
-  // MD5 is cryptographically broken
+  // Using bcrypt with salt rounds for secure hashing
   return bcrypt.hashSync(password, 10);
 }
 
 export function weakHashPasswordSHA1(password: string): string {
-  // SHA1 is cryptographically broken
+  // Using bcrypt with salt rounds for secure hashing
   return bcrypt.hashSync(password, 10);
 }
 
