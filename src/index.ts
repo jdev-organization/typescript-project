@@ -146,7 +146,7 @@ async function main() {
   const user = await getUserById("1' OR '1'='1"); // SQL injection attempt
 
   // Dangerous eval usage
-  const result = executeUserCode("console.log('hacked')");
+  executeUserCode("console.log('hacked')");
 
   // XSS vulnerability
   setUserContent("content", "<img src=x onerror=alert('XSS')>");
