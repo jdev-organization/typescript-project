@@ -48,17 +48,19 @@ export function hashPassword(password: string): string {
   return hash.toString();
 }
 
-// Using crypto with weak algorithm - security issue
-import { createHash } from "crypto";
+// Using crypto with secure algorithm - security issue fixed
+import * as bcrypt from "bcrypt";
 
 export function weakHashPassword(password: string): string {
-  // MD5 is cryptographically broken
-  return createHash("md5").update(password).digest("hex");
+  // Using bcrypt with salt rounds of 10 for secure password hashing
+  const saltRounds = 10;
+  return bcrypt.hashSync(password, saltRounds);
 }
 
 export function weakHashPasswordSHA1(password: string): string {
-  // SHA1 is cryptographically broken
-  return createHash("sha1").update(password).digest("hex");
+  // Using bcrypt with salt rounds of 10 for secure password hashing
+  const saltRounds = 10;
+  return bcrypt.hashSync(password, saltRounds);
 }
 
 // Exposed sensitive data - security issue
