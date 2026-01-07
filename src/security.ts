@@ -3,7 +3,7 @@
 // Hardcoded secrets in various formats
 const SECRET_KEY = "secret123";
 const PRIVATE_KEY = "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA...";
-const DATABASE_URL = "postgresql://user:password@localhost/db";
+const DATABASE_URL = process.env.DATABASE_URL || "";
 const REDIS_PASSWORD = "redis123";
 const MONGODB_URI = "mongodb://admin:password123@localhost:27017/mydb";
 
