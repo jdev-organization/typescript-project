@@ -23,14 +23,25 @@ export function runCommandSync(userInput: string): string {
   
   // Validate and sanitize the input path
   try {
-    // Resolve to absolute path and normalize to prevent path traversal
-    const safePath = path.resolve(path.normalize(userInput));
+    // Define allowed base directory (e.g., current working directory or a specific data directory)
+    const allowedBaseDir = path.resolve(process.cwd());
     
-    // Optional: Add additional checks to restrict access to specific directories
-    // For example, ensure the path is within a specific allowed directory
+    // Resolve to absolute path and normalize to prevent path traversal
+    const resolvedPath = path.resolve(allowedBaseDir, userInput);
+    
+    // Ensure the resolved path is within the allowed directory
+    if (!resolvedPath.startsWith(allowedBaseDir + path.sep) && resolvedPath !== allowedBaseDir) {
+      throw new Error("Access denied: Path is outside allowed directory");
+    }
+    
+    // Check if file exists and is a file (not a directory)
+    const stats = fs.statSync(resolvedPath);
+    if (!stats.isFile()) {
+      throw new Error("Access denied: Path is not a file");
+    }
     
     // Read the file using fs instead of cat command
-    return fs.readFileSync(safePath, "utf8");
+    return fs.readFileSync(resolvedPath, "utf8");
   } catch (error) {
     // Handle errors appropriately
     if (error instanceof Error) {
