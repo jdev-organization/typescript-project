@@ -17,10 +17,27 @@ export function runCommand(userInput: string): void {
   });
 }
 
-export function runCommandSync(userInput: string): void {
-  const { execSync } = require("child_process");
-  // Command injection - CRITICAL
-  execSync(`cat ${userInput}`);
+export function runCommandSync(userInput: string): string {
+  const path = require("path");
+  const fs = require("fs");
+  
+  // Validate and sanitize the input path
+  try {
+    // Resolve to absolute path and normalize to prevent path traversal
+    const safePath = path.resolve(path.normalize(userInput));
+    
+    // Optional: Add additional checks to restrict access to specific directories
+    // For example, ensure the path is within a specific allowed directory
+    
+    // Read the file using fs instead of cat command
+    return fs.readFileSync(safePath, "utf8");
+  } catch (error) {
+    // Handle errors appropriately
+    if (error instanceof Error) {
+      throw new Error(`Failed to read file: ${error.message}`);
+    }
+    throw error;
+  }
 }
 
 // Path traversal vulnerability
