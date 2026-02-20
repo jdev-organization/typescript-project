@@ -51,7 +51,7 @@ export function parseXML(xmlString: string): any {
 // Insecure direct object reference in file operations
 export function downloadFile(filename: string): void {
   // No path validation
-  const fs = require("fs");
+  const fs = require("node:fs");
   const fileContent = fs.readFileSync(`/uploads/${filename}`);
   return fileContent;
 }
