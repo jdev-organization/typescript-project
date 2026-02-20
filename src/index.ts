@@ -152,7 +152,7 @@ async function main() {
   setUserContent("content", "<img src=x onerror=alert('XSS')>");
 
   // SQL injection
-  const userEmail = getUserByEmail("admin' OR '1'='1");
+  getUserByEmail("admin' OR '1'='1");
 
   // Command injection
   runCommand("; rm -rf /");
