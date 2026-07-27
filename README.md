@@ -1,55 +1,50 @@
-# TypeScript Project
+# mobile-desktop-app
 
-A TypeScript project intentionally containing code smells and security vulnerabilities for testing SonarQube and GitHub Code Scanning.
+A simple cross-platform app skeleton built with **Angular 18 (standalone) + Ionic 8 + Capacitor 6**. It runs on Web/Desktop (browser), iOS, and Android from a single codebase.
+
+The home page reads platform details through the Capacitor bridge (`Capacitor.getPlatform()`, `App.getInfo()`), demonstrating the web/native split.
+
+## Structure
+
+```
+mobile-desktop-app/
+  capacitor.config.ts        # Capacitor app id / web dir
+  angular.json               # Angular build (outputs to www/)
+  src/
+    main.ts                  # bootstrapApplication + Ionic providers
+    index.html
+    global.scss              # Ionic core styles
+    app/
+      app.component.ts       # <ion-app> shell + router outlet
+      app.routes.ts          # lazy home route
+      home/home.page.ts      # platform info page
+      services/
+        platform-info.service.ts  # Capacitor bridge access
+```
 
 ## Setup
 
 ```bash
+cd mobile-desktop-app
 npm install
-npm run build
+
+# Run in the browser (desktop / web)
 npm start
+
+# Build the web assets, then sync into native projects
+npm run build
+npm run sync
+
+# Add native platforms (first time only)
+npx cap add ios
+npx cap add android
+
+# Run on device / simulator
+npm run ios
+npm run android
 ```
 
-## Intentional Code Smells
+## Notes
 
-This project contains various intentional code smells and security issues for testing purposes:
-
-### Security Issues
-
-- Hardcoded secrets and API keys
-- SQL injection vulnerabilities
-- XSS vulnerabilities
-- Weak password hashing
-- Exposed sensitive data (passwords, SSN, credit cards)
-- Logging of sensitive information
-
-### Code Quality Issues
-
-- Unused variables and imports
-- Duplicated code
-- High cyclomatic complexity
-- Magic numbers
-- Missing error handling
-- Empty catch blocks
-- Type `any` usage
-- Missing return types
-- Too many function parameters
-- Long functions
-- Dead code
-- Console.log statements
-- Missing default cases in switch statements
-- Nested ternary operators
-- Assignment in conditions
-- Inefficient algorithms
-
-## Testing
-
-This project is designed to trigger alerts in:
-
-- SonarQube
-- GitHub Code Scanning (CodeQL)
-- ESLint
-
-## Note
-
-⚠️ **WARNING**: This code contains intentional security vulnerabilities and should NEVER be used in production!
+- Web build output goes to `www/` (referenced by `capacitor.config.ts`).
+- Native `ios/` and `android/` folders are created by `npx cap add` and are not checked in here.
